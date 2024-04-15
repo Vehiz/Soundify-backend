@@ -13,10 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const user_1 = __importDefault(require("../models/user"));
+const variables_1 = require("../utils/variables");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     const user = yield user_1.default.create({ name, email, password });
+    //Send verification email
+    const transport = nodemailer_1.default.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+            user: variables_1.MAILTRAP_USER,
+            pass: variables_1.MAILTRAP_PASS
+        }
+    });
+    transport.sendMail({
+        to: user.email,
+        from: "VictorEhiz@soundify.app",
+        html: "<h1> Hello Habibi </h1>"
+    });
     res.json({
         message: "user created successfully",
         user
