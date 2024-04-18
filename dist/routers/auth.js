@@ -6,4 +6,6 @@ const validator_1 = require("../middleware/validator");
 const user_1 = require("../controller/user");
 const router = (0, express_1.Router)();
 router.post("/create", (0, validator_1.validate)(validationSchema_1.CreateUserSchema), user_1.create);
+router.post("/verify-email", (0, validator_1.validate)(validationSchema_1.EmailVerificationBody), user_1.verifyEmail);
+router.post("/re-verify-email", (0, validator_1.validate)(validationSchema_1.EmailVerificationBody));
 exports.default = router;

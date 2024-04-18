@@ -23,10 +23,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserSchema = void 0;
+exports.EmailVerificationBody = exports.CreateUserSchema = void 0;
+const mongoose_1 = require("mongoose");
 const Yup = __importStar(require("yup"));
 exports.CreateUserSchema = Yup.object().shape({
     name: Yup.string().trim().required("Name is missing").min(3, "name is too short").max(20, "Name is too long"),
     email: Yup.string().email("invalid email").required(),
     password: Yup.string().required("password is missing").min(8, "password is too short").max(20, "password is too long")
+});
+exports.EmailVerificationBody = Yup.object().shape({
+    otp: Yup.string().trim().required("invalid token"),
+    userId: Yup.string().transform(function (value) {
+        if (this.isType(value) && (0, mongoose_1.isValidObjectId)(value)) {
+            return value;
+        }
+        return "";
+    }).required("Invalid userId")
 });
